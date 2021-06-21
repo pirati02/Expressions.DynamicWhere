@@ -33,9 +33,9 @@ namespace Expression.Extensions
                 var property1 = index + 1 >= propertiesList.Count ? null : propertiesList[index + 1];
 
                 var leftExpression =
-                    GetProperExpression<T>(property, termConstant, containsMethod);
+                    GetProperExpression(property, termConstant, containsMethod);
                 var rightExpression =
-                    GetProperExpression<T>(property1, termConstant, containsMethod);
+                    GetProperExpression(property1, termConstant, containsMethod);
 
                 orExpression = AddOrCreateOrExpression(leftExpression, rightExpression, orExpression);
             }
@@ -43,13 +43,15 @@ namespace Expression.Extensions
             if (orExpression == null)
                 return Enumerable.Empty<T>();
 
-            var lambda = System.Linq.Expressions.Expression.Lambda<Func<T, bool>>(orExpression, sourceParameterExpression);
+            var lambda =
+                System.Linq.Expressions.Expression.Lambda<Func<T, bool>>(orExpression, sourceParameterExpression);
             var res = source.Where(lambda.Compile());
 
             return res;
         }
 
-        private static List<MemberExpression> MapKeyPropertiesToMemberExpressions(IEnumerable<string> keyProperties, ParameterExpression sourceParameterExpression)
+        private static List<MemberExpression> MapKeyPropertiesToMemberExpressions(IEnumerable<string> keyProperties,
+            ParameterExpression sourceParameterExpression)
         {
             return keyProperties
                 .Where(a => !string.IsNullOrEmpty(a))
@@ -91,7 +93,7 @@ namespace Expression.Extensions
             return orExpression;
         }
 
-        private static System.Linq.Expressions.Expression GetProperExpression<T>(
+        private static System.Linq.Expressions.Expression GetProperExpression(
             System.Linq.Expressions.Expression property,
             System.Linq.Expressions.Expression termConstant,
             MethodInfo containsMethod)
@@ -99,38 +101,32 @@ namespace Expression.Extensions
             if (property == null)
                 return null;
 
-            System.Linq.Expressions.Expression searchExpression = null;
             if (
                 property.Type.IsValueType && termConstant.Type.IsValueType
                                           && property.Type == termConstant.Type
             )
             {
-                searchExpression = System.Linq.Expressions.Expression.Equal(property, termConstant);
+                return System.Linq.Expressions.Expression.Equal(property, termConstant);
             }
-            else
+
+            //for string contains
+            if (property.Type == typeof(string) && termConstant.Type == typeof(string))
             {
-                //for string contains
-                if (property.Type == typeof(string) && termConstant.Type == typeof(string))
-                {
-                    searchExpression =
-                        System.Linq.Expressions.Expression.Call(property, containsMethod!, termConstant);
-                }
-                //and for another reference type equals
-                else if (property.Type == termConstant.Type)
-                {
-                    var equalsMethod = property.Type.GetMethods()
-                        .FirstOrDefault(a => a.GetParameters().Length == 1 && a.Name == "Equals");
-                    var equalsMethodExpression =
-                        System.Linq.Expressions.Expression.Call(property, equalsMethod!, termConstant);
-
-                    var notNullExpression = System.Linq.Expressions.Expression.NotEqual(property,
-                        System.Linq.Expressions.Expression.Constant(null));
-                    searchExpression =
-                        System.Linq.Expressions.Expression.AndAlso(notNullExpression, equalsMethodExpression);
-                }
+                return
+                    System.Linq.Expressions.Expression.Call(property, containsMethod!, termConstant);
             }
+            //and for another reference type equals
 
-            return searchExpression;
+            if (property.Type != termConstant.Type) return null;
+            var equalsMethod = property.Type.GetMethods()
+                .FirstOrDefault(a => a.GetParameters().Length == 1 && a.Name == "Equals");
+            var equalsMethodExpression =
+                System.Linq.Expressions.Expression.Call(property, equalsMethod!, termConstant);
+
+            var notNullExpression = System.Linq.Expressions.Expression.NotEqual(property,
+                System.Linq.Expressions.Expression.Constant(null));
+            return
+                System.Linq.Expressions.Expression.AndAlso(notNullExpression, equalsMethodExpression);
         }
     }
 }
