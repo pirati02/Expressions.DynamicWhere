@@ -13,47 +13,37 @@ namespace Expressions
                 new()
                 {
                     Name = "user1",
-                    Position = "user66"
+                    Position = "position1",
+                    Address = "user1 address 1",
+                    WorkStatus = "status 1"
                 },
                 new()
                 {
-                    Name = "user1",
-                    Position = "user3"
+                    Name = "user2",
+                    Position = "position2",
+                    Address = "address 2",
+                    WorkStatus = "status 2"
                 },
                 new()
                 {
                     Name = "user3",
-                    Position = "user3"
+                    Position = "position3",
+                    Address = "address 2",
+                    WorkStatus = "status 3"
                 },
                 new()
                 {
                     Name = "user4",
-                    Position = "user4",
-                    Location = new Location
-                    {
-                        X = 1,
-                        Y = 2
-                    }
-                },
-                new()
-                {
-                    Name = "user5",
-                    Location = new Location
-                    {
-                        X = 1,
-                        Y = 2
-                    },
-                    Position = "user5"
-                },
+                    Position = "position4",
+                    Address = "user4 address 4",
+                    WorkStatus = "address 2"
+                }
             };
 
-            var someFiltering = list.DynamicWhere(new Location
+            var someFiltering = list.DynamicWhere("address 2", new[]
             {
-                X = 1,
-                Y = 2
-            }, new[]
-            {
-                "Location",
+                "WorkStatus",
+                "Address",
                 "Name",
                 "Position"
             });
@@ -69,12 +59,14 @@ namespace Expressions
     {
         public string Name { get; init; }
         public string Position { get; init; }
+        public string Address { get; set; }
+        public string WorkStatus { get; set; }
 
         public Location Location { get; init; }
 
         public override string ToString()
         {
-            return $"[Name = {Name},\nPosition = {Position},\nLocation = {Location}]";
+            return $"[\n\tName = {Name},\n\tPosition = {Position},\n\tLocation = {Location},\n\tAddress = {Address},\n\tWorkStatus = {WorkStatus}\n]";
         }
     }
 
