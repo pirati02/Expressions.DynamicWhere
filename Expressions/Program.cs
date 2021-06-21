@@ -59,40 +59,12 @@ namespace Expressions
     {
         public string Name { get; init; }
         public string Position { get; init; }
-        public string Address { get; set; }
-        public string WorkStatus { get; set; }
-
-        public Location Location { get; init; }
+        public string Address { get; init; }
+        public string WorkStatus { get; init; } 
 
         public override string ToString()
         {
-            return $"[\n\tName = {Name},\n\tPosition = {Position},\n\tLocation = {Location},\n\tAddress = {Address},\n\tWorkStatus = {WorkStatus}\n]";
+            return $"[\n\tName = {Name},\n\tPosition = {Position},\n\tAddress = {Address},\n\tWorkStatus = {WorkStatus}\n]";
         }
-    }
-
-    public class Location
-    {
-        public int X { get; init; }
-        public int Y { get; init; }
-
-        public override string ToString()
-        {
-            return $"[X = {X}\nY = {Y}]";
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (obj is Location location)
-            {
-                return location.X == X && location.Y == Y;
-            }
-
-            return obj == this;
-        }
-
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(X, Y);
-        }
-    }
+    } 
 }
