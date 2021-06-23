@@ -3,59 +3,58 @@
     class Program
     {
         static void Main()
-        { 
+        {
             var list = new List<User>
             {
                 new()
                 {
                     Name = "user1",
-                    Position = "user66"
+                    Position = "position1",
+                    Address = "user1 address 1",
+                    WorkStatus = "status 1"
                 },
                 new()
                 {
-                    Name = "user1",
-                    Position = "user3"
+                    Name = "user2",
+                    Position = "position2",
+                    Address = "address 2",
+                    WorkStatus = "status 2"
                 },
                 new()
                 {
                     Name = "user3",
-                    Position = "user3"
+                    Position = "position3",
+                    Address = "address 2",
+                    WorkStatus = "status 3"
                 },
                 new()
                 {
                     Name = "user4",
-                    Position = "user4",
-                    Location = new Location
-                    {
-                        X = 1,
-                        Y = 2
-                    }
-                },
-                new()
-                {
-                    Name = "user5",
-                    Location = new Location
-                    {
-                        X = 1,
-                        Y = 2
-                    },
-                    Position = "user5"
-                },
+                    Position = "position4",
+                    Address = "user4 address 4",
+                    WorkStatus = "address 2"
+                }
             };
 
-            var someFiltering = list.DynamicWhere(new Location
+            var filtered1 = list.DynamicWhere("address 2", new[]
             {
-                X = 1,
-                Y = 2
-            }, new[]
-            {
-                "Location",
+                "WorkStatus",
+                "Address",
                 "Name",
                 "Position"
             });
 
-            foreach (var user in someFiltering)
+            foreach (var user in filtered1)
+            {
+                Console.WriteLine(user.ToString());
+            }
+            
+            var filtered2 =
+                list.DynamicWhere("address 2", x => x.Name, x => x.Position, x => x.Address, x => x.WorkStatus).ToList();
+
+            foreach (var user in filtered2)
             {
                 Console.WriteLine(user.ToString());
             }
         }
+    }
