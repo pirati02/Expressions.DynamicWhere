@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Expression.Extensions;
 
 namespace Expressions
@@ -7,7 +8,7 @@ namespace Expressions
     class Program
     {
         static void Main()
-        { 
+        {
             var list = new List<User>
             {
                 new()
@@ -40,7 +41,7 @@ namespace Expressions
                 }
             };
 
-            var someFiltering = list.DynamicWhere("address 2", new[]
+            var filtered1 = list.DynamicWhere("address 2", new[]
             {
                 "WorkStatus",
                 "Address",
@@ -48,7 +49,15 @@ namespace Expressions
                 "Position"
             });
 
-            foreach (var user in someFiltering)
+            foreach (var user in filtered1)
+            {
+                Console.WriteLine(user.ToString());
+            }
+            
+            var filtered2 =
+                list.DynamicWhere("address 2", x => x.Name, x => x.Position, x => x.Address, x => x.WorkStatus).ToList();
+
+            foreach (var user in filtered2)
             {
                 Console.WriteLine(user.ToString());
             }
@@ -60,11 +69,12 @@ namespace Expressions
         public string Name { get; init; }
         public string Position { get; init; }
         public string Address { get; init; }
-        public string WorkStatus { get; init; } 
+        public string WorkStatus { get; init; }
 
         public override string ToString()
         {
-            return $"[\n\tName = {Name},\n\tPosition = {Position},\n\tAddress = {Address},\n\tWorkStatus = {WorkStatus}\n]";
+            return
+                $"[\n\tName = {Name},\n\tPosition = {Position},\n\tAddress = {Address},\n\tWorkStatus = {WorkStatus}\n]";
         }
-    } 
+    }
 }
