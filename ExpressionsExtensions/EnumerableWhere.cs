@@ -42,18 +42,40 @@ namespace Expression.Extensions
             System.Linq.Expressions.Expression orExpression = null;
             for (var index = 0; index < propertiesList.Count; index += 2)
             {
-                var shouldAddExpression = index > 0 || index < propertiesList.Count - 1;
-                if (!shouldAddExpression) continue;
+                var addOrExpression = index < propertiesList.Count - 1;
+                if (!addOrExpression)
+                {
+                    var property = propertiesList[index];
+                    if (orExpression != null)
+                    {
+                        var rightExpression = GetProperExpression(property, termConstant, containsMethod);
+                        if (rightExpression != null)
+                        {
+                            orExpression = System.Linq.Expressions.Expression.Or(orExpression, rightExpression);
+                        }
 
-                var property = propertiesList[index];
-                var property1 = index + 1 >= propertiesList.Count ? null : propertiesList[index + 1];
+                        continue;
+                    }
 
-                var leftExpression =
-                    GetProperExpression(property, termConstant, containsMethod);
-                var rightExpression =
-                    GetProperExpression(property1, termConstant, containsMethod);
+                    orExpression = GetProperExpression(property, termConstant, containsMethod);
+                }
+                else
+                {
+                    var property = propertiesList[index];
+                    var property1 = index + 1 >= propertiesList.Count ? null : propertiesList[index + 1];
 
-                orExpression = AddOrCreateOrExpression(leftExpression, rightExpression, orExpression);
+                    var leftExpression =
+                        GetProperExpression(property, termConstant, containsMethod);
+                    var rightExpression =
+                        GetProperExpression(property1, termConstant, containsMethod);
+                    if (leftExpression == null || rightExpression == null)
+                    {
+                        orExpression = leftExpression ?? rightExpression;
+                        continue;
+                    }
+
+                    orExpression = AddOrCreateOrExpression(leftExpression, rightExpression, orExpression);
+                }
             }
 
             if (orExpression == null)
@@ -92,23 +114,19 @@ namespace Expression.Extensions
         )
         {
             if (leftExpression == null) return orExpression;
-
-            if (rightExpression != null)
+            if (rightExpression == null) return orExpression;
+            
+            if (orExpression == null)
             {
-                if (orExpression == null)
-                {
-                    orExpression = System.Linq.Expressions.Expression.Or(leftExpression, rightExpression);
-                    return orExpression;
-                }
-
-                var addedOrExpression =
-                    System.Linq.Expressions.Expression.Or(leftExpression, rightExpression);
-                orExpression = System.Linq.Expressions.Expression.Or(orExpression, addedOrExpression);
+                orExpression = System.Linq.Expressions.Expression.Or(leftExpression, rightExpression);
                 return orExpression;
             }
 
-            orExpression ??= leftExpression;
+            var addedOrExpression =
+                System.Linq.Expressions.Expression.Or(leftExpression, rightExpression);
+            orExpression = System.Linq.Expressions.Expression.Or(orExpression, addedOrExpression);
             return orExpression;
+
         }
 
         private static System.Linq.Expressions.Expression GetProperExpression(
