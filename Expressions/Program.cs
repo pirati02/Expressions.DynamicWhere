@@ -41,13 +41,12 @@ namespace Expressions
                 }
             };
 
-            var filtered1 = list.DynamicWhere("address 2", new[]
-            {
-                "WorkStatus",
+            var filtered1 = list.DynamicWhere("user 4", new[]
+            {  
                 "Address",
                 "Name",
                 "Position"
-            });
+            }).ToList();
 
             foreach (var user in filtered1)
             {

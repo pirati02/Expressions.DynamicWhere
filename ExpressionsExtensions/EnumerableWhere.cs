@@ -22,14 +22,19 @@ namespace Expression.Extensions
 
         public IEnumerable<T> Where()
         {
-            if (_term is null)
-                return Enumerable.Empty<T>();
+            switch (_term)
+            {
+                case null:
+                    return Enumerable.Empty<T>();
+                case string termString when string.IsNullOrEmpty(termString):
+                    return Enumerable.Empty<T>();
+            }
 
             var source = _source.ToList();
             var sourceParameterExpression = System.Linq.Expressions.Expression.Parameter(typeof(T));
             var termConstant = System.Linq.Expressions.Expression.Constant(_term);
             var propertiesList =
-                MapKeyPropertiesToMemberExpressions(_keyProperties, sourceParameterExpression);
+                MapKeyPropertiesToMemberExpressions<T>(_keyProperties, sourceParameterExpression);
 
             var containsMethod = GetContainsMethod();
 
@@ -61,11 +66,13 @@ namespace Expression.Extensions
             return res;
         }
 
-        private static List<MemberExpression> MapKeyPropertiesToMemberExpressions(IEnumerable<string> keyProperties,
-            ParameterExpression sourceParameterExpression)
+        private static List<MemberExpression> MapKeyPropertiesToMemberExpressions<T>(IEnumerable<string> keyProperties,
+            System.Linq.Expressions.Expression sourceParameterExpression)
         {
+            var reflectedType = typeof(T);
             return keyProperties
-                .Where(a => !string.IsNullOrEmpty(a))
+                .Where(a => !string.IsNullOrEmpty(a) &&
+                            reflectedType.GetProperties().Any(p => p.Name == a))
                 .Select(property =>
                     System.Linq.Expressions.Expression.PropertyOrField(sourceParameterExpression, property))
                 .ToList();

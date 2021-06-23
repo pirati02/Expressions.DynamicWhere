@@ -24,23 +24,9 @@ namespace Expression.Extensions
 
         private static string GetLambdaReturnPropertyName<T, TResult>(Expression<Func<T, TResult>> property)
         {
-            var type = typeof(T);
-
-            if (property.Body is not MemberExpression member)
-                throw new ArgumentException(
-                    $"Expression '{property}' refers to a method, not a property.");
-
-            var propInfo = member.Member as PropertyInfo;
-            if (propInfo == null)
-                throw new ArgumentException(
-                    $"Expression '{property}' refers to a field, not a property.");
-
-            if (type != propInfo.ReflectedType &&
-                !type.IsSubclassOf(propInfo.ReflectedType))
-                throw new ArgumentException(
-                    $"Expression '{property}' refers to a property that is not from type {type}.");
-
-            return propInfo.Name;
+            var member = property.Body as MemberExpression;
+            var propInfo = member!.Member as PropertyInfo;
+            return propInfo?.Name;
         }
     }
 }

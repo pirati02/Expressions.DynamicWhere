@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Expressions", "Expressions\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressionsExtensions", "ExpressionsExtensions\ExpressionsExtensions.csproj", "{CBAA4B34-26D8-49AD-9DAE-44506939A89A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Expressions.Tests", "Expressions.Tests\Expressions.Tests.csproj", "{14DEA188-020A-4869-A267-0856A40A8FF1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{CBAA4B34-26D8-49AD-9DAE-44506939A89A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CBAA4B34-26D8-49AD-9DAE-44506939A89A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CBAA4B34-26D8-49AD-9DAE-44506939A89A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14DEA188-020A-4869-A267-0856A40A8FF1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14DEA188-020A-4869-A267-0856A40A8FF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14DEA188-020A-4869-A267-0856A40A8FF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14DEA188-020A-4869-A267-0856A40A8FF1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
