@@ -41,7 +41,7 @@ namespace Expressions
                 }
             };
 
-            var filtered1 = list.DynamicWhere("user 4", new[]
+            var filtered1 = list.Filter("user4", new[]
             {  
                 "Address",
                 "Name",
@@ -54,7 +54,7 @@ namespace Expressions
             }
             
             var filtered2 =
-                list.DynamicWhere("address 2", x => x.Name, x => x.Position, x => x.Address, x => x.WorkStatus).ToList();
+                list.Filter("address 2", x => x.Name, x => x.Position, x => x.Address, x => x.WorkStatus).ToList();
 
             foreach (var user in filtered2)
             {

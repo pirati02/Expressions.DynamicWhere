@@ -8,13 +8,13 @@ namespace Expression.Extensions
 {
     public static class WhereExtensions
     {
-        public static IEnumerable<T> DynamicWhere<T>(this IEnumerable<T> source, object term,
+        public static IEnumerable<T> Filter<T>(this IEnumerable<T> source, object term,
             IEnumerable<string> keyProperties)
         {
             return new EnumerableWhere<T>(source, term, keyProperties).Where();
         }
 
-        public static IEnumerable<T> DynamicWhere<T, TResult>(this IEnumerable<T> source, object term,
+        public static IEnumerable<T> Filter<T, TResult>(this IEnumerable<T> source, object term,
             params Expression<Func<T, TResult>>[] keyProperties)
         {
             var propertiesList = keyProperties.Select(GetLambdaReturnPropertyName).ToList();

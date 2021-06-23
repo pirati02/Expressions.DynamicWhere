@@ -20,7 +20,7 @@ namespace Expressions.Tests
             var properties = new[] {"Address", "Position"};
 
             //Act
-            var filtered = list.DynamicWhere(term, properties).ToList();
+            var filtered = list.Filter(term, properties).ToList();
 
             //Assert
             filtered.Should().BeEmpty();
@@ -42,7 +42,7 @@ namespace Expressions.Tests
             }.Where(a => !string.IsNullOrEmpty(a));
 
             //Act
-            var filtered = list.DynamicWhere(term, keyProperties).ToList();
+            var filtered = list.Filter(term, keyProperties).ToList();
 
             //Assert
             filtered.Should().NotBeNull();
@@ -64,7 +64,7 @@ namespace Expressions.Tests
             };
 
             //Act
-            var filteredList = list.DynamicWhere(query, keyProperties).ToList();
+            var filteredList = list.Filter(query, keyProperties).ToList();
 
             //Assert
             dataCount.Should().BeGreaterThan(0);
@@ -88,7 +88,7 @@ namespace Expressions.Tests
             };
 
             //Act
-            var filteredList = list.DynamicWhere(query, keyProperties).ToList();
+            var filteredList = list.Filter(query, keyProperties).ToList();
 
             //Assert
             dataCount.Should().BeGreaterThan(0);
