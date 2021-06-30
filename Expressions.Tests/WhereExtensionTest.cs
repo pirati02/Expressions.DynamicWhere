@@ -75,7 +75,7 @@ namespace Expressions.Tests
 
         [Theory]
         [InlineData(4, "Address", "Age", "WorkStatus", 1)]
-        [InlineData(12, "Address", "Age", "Name", 3)]
+        [InlineData(12, "Address", "Age", "Unknown", 3)]
         [InlineData(1, "Address", "Age", "Name", 0)]
         public void DYNAMIC_WHERE_SHOULD_RETURN_DATA_ON_VALUE_TYPES(int ageQuery, string prop1, string prop2,
             string prop3, int dataCount)

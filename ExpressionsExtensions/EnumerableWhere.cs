@@ -113,8 +113,8 @@ namespace Expression.Extensions
             System.Linq.Expressions.Expression orExpression
         )
         {
-            if (leftExpression == null) return orExpression;
-            if (rightExpression == null) return orExpression;
+            // if (leftExpression == null) return orExpression;
+            // if (rightExpression == null) return orExpression;
             
             if (orExpression == null)
             {
